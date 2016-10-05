@@ -16,11 +16,21 @@ public class LRUImpl implements LRU {
     }
 
     public void put(int key, String value) {
-
+        if(lruMap.values().size()>=lruSize){
+            lruMap.remove(lruMap.keySet().iterator().next());
+        }
+        lruMap.put(key, value);
     }
 
     public String get(int key) throws Exception {
-        return "none";
+        if(lruMap.get(key)!=null){
+            final String value = lruMap.get(key);
+            lruMap.remove(key);
+            lruMap.put(key, value);
+            return value;
+        } else {
+            throw new NullPointerException("Key is not in cache");
+        }
     }
 
     @Override
